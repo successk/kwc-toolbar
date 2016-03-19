@@ -1,0 +1,91 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>&lt;kwc-seat-plan&gt;</title>
+
+  <script src="../webcomponentsjs/webcomponents-lite.min.js"></script>
+
+  <link rel="import" href="kwc-toolbar.html">
+  <style>
+    #content {
+      width: 1200px;
+      height: 100vh;
+      margin: auto;
+    }
+
+    kwc-toolbar {
+      background-color: #ff6f00;
+    }
+
+    kwc-toolbar-group {
+      background-color: #e65100;
+      margin-right: 5px;
+    }
+
+    kwc-toolbar-group.dragover {
+      border-left: 1px solid blue;
+    }
+  </style>
+</head>
+
+<body>
+<div id="content">
+  <kwc-toolbar iconsize="50">
+    <kwc-toolbar-group iconsize="30">
+      <kwc-toolbar-item name="bold"
+                        src="https://cdn2.iconfinder.com/data/icons/humano2/128x128/actions/format-text-bold.png"
+                        info="Set the text bold" iconsize="20"></kwc-toolbar-item>
+      <kwc-toolbar-item name="italic"
+                        src="https://cdn2.iconfinder.com/data/icons/humano2/128x128/actions/format-text-italic.png"
+                        info="Set the text italic"></kwc-toolbar-item>
+      <kwc-toolbar-item name="underline"
+                        src="https://cdn2.iconfinder.com/data/icons/humano2/128x128/actions/format-text-underline.png"
+                        info="Set the text underlined"></kwc-toolbar-item>
+    </kwc-toolbar-group>
+    <kwc-toolbar-group>
+      <kwc-toolbar-item name="duplicate" info="Duplicate the text">Duplicate</kwc-toolbar-item>
+    </kwc-toolbar-group>
+  </kwc-toolbar>
+
+  <div id="out">
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+    Aenean et dui dictum, bibendum erat vitae, finibus leo.
+    Suspendisse eget dignissim sapien.
+    Pellentesque sem enim, maximus non diam nec, tincidunt ornare sem.
+    Etiam ac lacinia arcu.
+    Nunc et ligula non tellus sagittis consectetur sit amet non purus.
+    Donec vitae iaculis nulla, vitae convallis sapien.
+    Mauris maximus dictum nunc, sit amet commodo tortor gravida eget.
+    Vivamus eleifend aliquam augue, at aliquam metus finibus nec.
+    Phasellus dapibus mauris sit amet aliquet ultricies.
+    Mauris bibendum, augue interdum molestie vulputate, augue ligula luctus quam, id maximus nibh justo a metus.
+    Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Aliquam auctor lacinia
+    facilisis.
+    Ut gravida posuere neque, sed pulvinar sapien hendrerit nec.
+    Aliquam nec nulla id urna commodo efficitur.
+  </div>
+</div>
+
+<script>
+  function toogle(style, active, normal) {
+    return function (e) {
+      e.preventDefault();
+      var elementStyle = document.querySelector("#out").style;
+      elementStyle[style] = elementStyle[style] === active ? normal : active;
+    }
+  }
+
+  var element = document.querySelector("kwc-toolbar");
+  element.addEventListener("bold", toogle("fontWeight", "bold", "normal"));
+  element.addEventListener("italic", toogle("fontStyle", "italic", "normal"));
+  element.addEventListener("underline", toogle("textDecoration", "underline", "none"));
+  element.addEventListener("duplicate", function (e) {
+    e.preventDefault();
+    document.querySelector("#out").textContent += document.querySelector("#out").textContent;
+  });
+</script>
+</body>
+
+</html>

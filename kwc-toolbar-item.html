@@ -1,0 +1,85 @@
+<link rel="import" href="../polymer/polymer.html">
+
+<dom-module id="kwc-toolbar-item">
+  <template>
+    <style>
+      :host {
+        cursor: pointer;
+        margin: 0;
+        padding: 0;
+        position: relative;
+      }
+    </style>
+
+    <div title="[[info]]">
+      <template is="dom-if" if="[[src]]">
+        <img src="[[src]]" alt="[[name]]" id="icon">
+      </template>
+      <template is="dom-if" if="[[!src]]">
+        <content></content>
+      </template>
+    </div>
+  </template>
+
+  <script>
+    Polymer({
+      is: 'kwc-toolbar-item',
+
+      properties: {
+        name: {
+          type: String,
+          value: null
+        },
+        src: {
+          type: String,
+          value: null
+        },
+        iconsize: {
+          type: Number,
+          value: null,
+          observer: "_updateIconSize"
+        },
+        info: {
+          type: String,
+          value: null
+        }
+      },
+
+      attached: function () {
+        var that = this;
+        if (!this.iconsize) {
+          this.iconsize = this._getSizeFromParent();
+        }
+        this._updateIconSize();
+        this.addEventListener("click", function (event) {
+          event.preventDefault();
+          that.fire(that.name);
+        });
+      },
+
+      _updateIconSize: function () {
+        var that = this;
+        Array.from(this.querySelectorAll("#icon")).forEach(function (icon) {
+          if (that.iconsize) {
+            icon.style.height = icon.style.width = that.iconsize + "px";
+          } else {
+            icon.style.height = icon.style.width = null;
+          }
+        });
+      },
+
+      _getSizeFromParent() {
+        var parentNode = this.parentNode;
+        while (parentNode) {
+          if (["KWC-TOOLBAR-GROUP", "KWC-TOOLBAR"].indexOf(parentNode.nodeName) > -1) {
+            if (parentNode.iconsize) {
+              return parentNode.iconsize;
+            }
+          }
+          parentNode = parentNode.parentNode;
+        }
+        return null;
+      }
+    });
+  </script>
+</dom-module>

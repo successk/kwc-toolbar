@@ -1,0 +1,106 @@
+<link rel="import" href="../polymer/polymer.html">
+
+<dom-module id="kwc-toolbar-group">
+  <template>
+    <style>
+      :host {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        position: relative;
+        padding-left: 12px;
+      }
+
+      #grap {
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        cursor: move;
+        width: 10px;
+        text-align: center;
+        background-color: rgba(0,0,0,0.1);
+      }
+    </style>
+
+    <div id="grap" draggable="true"></div>
+    <content></content>
+  </template>
+
+  <script>
+    Polymer({
+      is: 'kwc-toolbar-group',
+
+      properties: {
+        iconsize: {
+          type: Number,
+          value: null
+        },
+        gid: {
+          type: Number,
+          value: 0,
+          readOnly: true
+        }
+      },
+
+      listeners: {
+        "grap.dragstart": "_dragstart"
+      },
+
+      attached: function () {
+        this._setGid(new Date().valueOf() + "-" + Math.floor(Math.random() * 1000000));
+        var that = this;
+        this.addEventListener("dragover", function (e) {
+          that._dragover(e);
+        });
+        this.addEventListener("dragleave", function (e) {
+          that._dragleave(e);
+        });
+        this.addEventListener("drop", function (e) {
+          that._drop(e);
+        });
+      },
+
+      _dragstart: function (e) {
+        e.dataTransfer.setData("text/plain", this.gid);
+      },
+
+      _dragover: function (e) {
+        e.preventDefault();
+        this._leave = false;
+        this.classList.add("dragover");
+      },
+
+      _dragleave: function (e) {
+        var that = this;
+        // This trick avoids having the style set and removed after leaving a child element to another
+        // causing flash changes.
+        this._leave = true;
+        setTimeout(function () {
+          if (that._leave) {
+            that.classList.remove("dragover");
+          }
+        }, 5);
+      },
+
+      _drop: function (e) {
+        this.classList.remove("dragover");
+        var gid = e.dataTransfer.getData("text/plain");
+        var group = Array.from(this.getToolbar().querySelectorAll("kwc-toolbar-group")).find(function (group) {
+          return group.gid === gid;
+        });
+        if (group && group !== this) {
+          Polymer.dom(this.parentNode).insertBefore(group, this);
+        }
+      },
+
+      getToolbar: function () {
+        var parentNode = this.parentNode;
+        while (parentNode && parentNode.nodeName !== "KWC-TOOLBAR") {
+          parentNode = parentNode.parentNode;
+        }
+        return parentNode;
+      }
+    });
+  </script>
+</dom-module>
