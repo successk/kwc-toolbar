@@ -1,0 +1,50 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../paper-listbox/paper-listbox.html">
+
+<dom-module id="kwc-toolbar-select">
+  <template>
+    <style>
+      :host {
+        display: flex;
+      }
+    </style>
+
+    <paper-dropdown-menu label="[[label]]">
+      <paper-listbox class="dropdown-content" attr-for-selected="value" id="select">
+        <content></content>
+      </paper-listbox>
+    </paper-dropdown-menu>
+  </template>
+
+  <script>
+    Polymer({
+      is: 'kwc-toolbar-select',
+
+      properties: {
+        name: {
+          type: String,
+          value: null
+        },
+        label: {
+          type: String,
+          value: null
+        },
+        value: {
+          type: String,
+          value: null,
+          reflectToAttribute: true,
+          notify: true
+        }
+      },
+
+      listeners: {
+        "select.selected-changed": "_selectedChanged"
+      },
+
+      _selectedChanged: function(e) {
+        this.value = e.detail.value;
+      }
+    })
+  </script>
+</dom-module>
