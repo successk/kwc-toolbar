@@ -33,10 +33,17 @@ Or [download as ZIP](https://github.com/successk/kwc-toolbar/archive/master.zip)
     <kwc-toolbar-group iconsize="30">
       <kwc-toolbar-item name="bold" src="bold.png" info="Set the text bold" iconsize="20"></kwc-toolbar-item>
       <kwc-toolbar-item name="italic" src="italic.png" info="Set the text italic"></kwc-toolbar-item>
+      <kwc-toolbar-select name="font" label="Font family" value="{{font}}" info="Select the font family for the text">
+        <paper-item value="arial" style="font-family: Arial">Arial</paper-item>
+        <paper-item value="courier new" style="font-family: 'Courier New'">Courier New</paper-item>
+        <paper-item value="times new roman" style="font-family: 'Times New Roman'">Times New Roman</paper-item>
+      </kwc-toolbar-select>
     </kwc-toolbar-group>
-    <kwc-toolbar-group>
-      <kwc-toolbar-item name="copy" src="copy.png" info="Copy text"></kwc-toolbar-item>
-      <kwc-toolbar-item name="paste" src="paste.png" info="Paste text"></kwc-toolbar-item>
+    <kwc-toolbar-group stateful state="{{align}}">
+      <kwc-toolbar-item name="left" info="Align the text to the left">Left</kwc-toolbar-item>
+      <kwc-toolbar-item name="center" info="Center the text">Center</kwc-toolbar-item>
+      <kwc-toolbar-item name="right" info="Align the text to the right">Right</kwc-toolbar-item>
+      <kwc-toolbar-item name="justify" info="Justify the text">Justify</kwc-toolbar-item>
     </kwc-toolbar-group>
     <kwc-toolbar-group>
       <kwc-toolbar-item name="duplicate" info="Duplicate the text">Duplicate</kwc-toolbar-item>
@@ -58,6 +65,8 @@ Attribute   | Options         | Default      | Description
 ---         | ---             | ---          | ---
 `iconsize`  | *number*        | `null`       | Size of icons in this group, if items does not redefine it
 `gid`       | *String*        | `null`       | *Read only*, id of the kwc-group (different of id kept for developer use)
+`stateful`  | *Boolean*       | `false`      | If true, `kwc-toolbar-item` will act as radio buttons
+`state`     | *String*        | `null`       | The value of selected item when group is `stateful`
 
 ### kwc-toolbar-item
 
@@ -67,6 +76,15 @@ Attribute   | Options         | Default      | Description
 `src`       | *string*        | `null`       | Url of the icon image
 `iconsize`  | *number*        | `null`       | Size of icon of this item if defined with src
 `info`      | *string*        | `null`       | Text informing the user about current item
+
+### kwc-toolbar-select
+
+Attribute   | Options         | Default      | Description
+---         | ---             | ---          | ---
+`name`      | *string*        | `null`       | Name of the item and the toolbar event on click
+`label`     | *string*        | `null`       | Label to display when no value is selected
+`info`      | *string*        | `null`       | Text informing the user about current item
+`value`     | *string*        | `null`       | Value of the select
 
 ## Children
 
@@ -88,6 +106,12 @@ Selector | Description
 ---      | ---
 `*`      | Content of the item, displayed only when src is not defined.
 
+### kwc-toolbar-select
+
+Selector | Description
+---      | ---
+`*`      | Options of the select. Should be `<paper-item>` elements with a `value` attribute.
+
 ## Methods
 
 Method        | Parameters   | Returns     | Description
@@ -101,7 +125,6 @@ Event     | Detail   | Description
 None      | -        | -
 
 When the user click on a `kwc-toolbar-item`, an event with the component name will be triggered.
-
 For instance, a click on `<kwc-toolbar-item name="xxx">` will trigger the event `xxx`;
 
 ## Styles

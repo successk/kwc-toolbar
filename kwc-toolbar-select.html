@@ -10,7 +10,7 @@
       }
     </style>
 
-    <paper-dropdown-menu label="[[label]]">
+    <paper-dropdown-menu label="[[label]]" title="[[info]]">
       <paper-listbox class="dropdown-content" attr-for-selected="value" id="select">
         <content></content>
       </paper-listbox>
@@ -27,6 +27,10 @@
           value: null
         },
         label: {
+          type: String,
+          value: null
+        },
+        info: {
           type: String,
           value: null
         },
