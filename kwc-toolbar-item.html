@@ -54,6 +54,7 @@
         this.addEventListener("click", function (event) {
           event.preventDefault();
           that.fire(that.name);
+          that.fire("kwc-toolbar-item-clicked", that.name);
         });
       },
 

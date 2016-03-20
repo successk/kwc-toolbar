@@ -40,6 +40,16 @@
           type: Number,
           value: 0,
           readOnly: true
+        },
+        stateful: {
+          type: Boolean,
+          value: false
+        },
+        state: {
+          type: String,
+          value: null,
+          notify: true,
+          reflectToAttribute: true
         }
       },
 
@@ -58,6 +68,17 @@
         });
         this.addEventListener("drop", function (e) {
           that._drop(e);
+        });
+
+        this.addEventListener("kwc-toolbar-item-clicked", function(e){
+          if (that.stateful) {
+            e.preventDefault();
+            that.state = e.detail;
+            Array.from(that.querySelectorAll("kwc-toolbar-item")).forEach(function (item) {
+              item.classList.remove("active");
+            });
+            that.querySelector("kwc-toolbar-item[name=" + e.detail + "]").classList.add("active");
+          }
         });
       },
 

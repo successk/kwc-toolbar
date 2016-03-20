@@ -1,0 +1,111 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="kwc-toolbar.html">
+
+<dom-module id="index-kwc-toolbar-show">
+  <template>
+    <style>
+      kwc-toolbar {
+        background-color: #ff6f00;
+      }
+
+      kwc-toolbar-group {
+        background-color: #e65100;
+        margin-right: 5px;
+      }
+
+      kwc-toolbar-group.dragover {
+        border-left: 1px solid blue;
+      }
+
+      kwc-toolbar-item.active {
+        font-weight: bold;
+      }
+    </style>
+
+    <kwc-toolbar iconsize="50" id="toolbar">
+      <kwc-toolbar-group iconsize="30">
+        <kwc-toolbar-item name="bold"
+                          src="https://cdn2.iconfinder.com/data/icons/humano2/128x128/actions/format-text-bold.png"
+                          info="Set the text bold" iconsize="20"></kwc-toolbar-item>
+        <kwc-toolbar-item name="italic"
+                          src="https://cdn2.iconfinder.com/data/icons/humano2/128x128/actions/format-text-italic.png"
+                          info="Set the text italic"></kwc-toolbar-item>
+        <kwc-toolbar-item name="underline"
+                          src="https://cdn2.iconfinder.com/data/icons/humano2/128x128/actions/format-text-underline.png"
+                          info="Set the text underlined"></kwc-toolbar-item>
+      </kwc-toolbar-group>
+      <kwc-toolbar-group>
+        <kwc-toolbar-item name="duplicate" info="Duplicate the text">Duplicate</kwc-toolbar-item>
+      </kwc-toolbar-group>
+      <kwc-toolbar-group stateful state="{{align}}">
+        <kwc-toolbar-item name="left" info="Align the text to the left">L</kwc-toolbar-item>
+        <kwc-toolbar-item name="center" info="Center the text">C</kwc-toolbar-item>
+        <kwc-toolbar-item name="right" info="Align the text to the right">R</kwc-toolbar-item>
+        <kwc-toolbar-item name="justify" info="Justify the text">J</kwc-toolbar-item>
+      </kwc-toolbar-group>
+    </kwc-toolbar>
+
+    <div id="out">
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+      Aenean et dui dictum, bibendum erat vitae, finibus leo.
+      Suspendisse eget dignissim sapien.
+      Pellentesque sem enim, maximus non diam nec, tincidunt ornare sem.
+      Etiam ac lacinia arcu.
+      Nunc et ligula non tellus sagittis consectetur sit amet non purus.
+      Donec vitae iaculis nulla, vitae convallis sapien.
+      Mauris maximus dictum nunc, sit amet commodo tortor gravida eget.
+      Vivamus eleifend aliquam augue, at aliquam metus finibus nec.
+      Phasellus dapibus mauris sit amet aliquet ultricies.
+      Mauris bibendum, augue interdum molestie vulputate, augue ligula luctus quam, id maximus nibh justo a metus.
+      Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Aliquam auctor
+      lacinia
+      facilisis.
+      Ut gravida posuere neque, sed pulvinar sapien hendrerit nec.
+      Aliquam nec nulla id urna commodo efficitur.
+    </div>
+  </template>
+
+  <script>
+    Polymer({
+      is: "index-kwc-toolbar-show",
+
+      properties: {
+        align: {
+          type: Number,
+          value: null,
+          observer: "_alignChanged"
+        }
+      },
+
+      listeners: {
+        "toolbar.duplicate": "_onDuplicate"
+      },
+
+      attached: function () {
+        // Listen events with DOM.
+        var that = this
+        function toogle(style, active, normal) {
+          return function (e) {
+            e.preventDefault();
+            var elementStyle = that.$.out.style;
+            elementStyle[style] = elementStyle[style] === active ? normal : active;
+          }
+        }
+
+        var element = document.querySelector("kwc-toolbar");
+        element.addEventListener("bold", toogle("fontWeight", "bold", "normal"));
+        element.addEventListener("italic", toogle("fontStyle", "italic", "normal"));
+        element.addEventListener("underline", toogle("textDecoration", "underline", "none"));
+      },
+
+      _onDuplicate: function (e) {
+        e.preventDefault();
+        this.$.out.textContent += this.$.out.textContent;
+      },
+
+      _alignChanged: function(align) {
+        this.$.out.style.textAlign = align;
+      }
+    })
+  </script>
+</dom-module>
